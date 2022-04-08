@@ -1,0 +1,311 @@
+---
+title: The Big 12 has Staked Their Claim as the Best Conference in College Basketball
+author: Dillon Pelster
+date: '2022-04-08'
+slug: the-big-12-has-staked-their-claim-as-the-best-conference-in-college-basketball
+categories: []
+tags: []
+---
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE }
+library(tidyverse)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(dplyr)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+kenpom <- read_csv("KenPom-KenPom.csv")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+sports_reference <- read_csv("Sports reference - Sheet1.csv")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+defefficiency <- read_csv("DefEfficiency - Sheet1.csv")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+warren <- read_csv("Warren - Sheet1.csv")
+```
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+quad1 <- read_csv("TeamQuadTracker20220314.csv")
+```
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+defrating <- defefficiency %>%
+  group_by(Rank, Team, `2021`) %>%
+  arrange(`2021`)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+top68 <- defrating %>%
+  select(`2021`) %>%
+  top_n(68)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+big12defense <- top68 %>%
+  filter(Team == "Kansas" | Team == "Baylor" | Team == "Texas Tech" | Team == "Texas" | Team == "TX Christian" | Team == "Oklahoma"  | Team == "Oklahoma St"  | Team == "Iowa State") %>%
+  mutate(Conference = "Big 12")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+secdefense <- top68 %>%
+   filter(Team == "LSU" | Team == "Tennessee" | Team == "Auburn" | Team == "Arkansas" | Team == "Kentucky" | Team == "Texas A&M") %>%
+  mutate(Conference = "SEC")
+  
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+bigeastdefense <- top68 %>%
+   filter(Team == "Creighton" | Team == "Seton Hall" | Team == "Connecticut") %>%
+  mutate(Conference = "Big East")
+  
+```
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Pac12defense <- top68 %>%
+   filter(Team == "Arizona" | Team == "USC" | Team == "UCLA" | Team == "Arizona St" | Team == "Wash State") %>%
+  mutate(Conference = "Pac 12")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+big10defense <- top68 %>%
+   filter(Team == "Indiana") %>%
+  mutate(Conference = "Big Ten")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+accdefense <- top68 %>%
+  filter(Team == "Wake Forest") %>%
+  mutate(Conference = "ACC")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+defenses <- bind_rows(big10defense, accdefense, secdefense, big12defense, bigeastdefense, Pac12defense) %>%
+  group_by(Conference) %>%
+    summarise(Count = n())
+```
+
+  The 2021-2022 College Basketball season has come to a conclusion, with Bill Self and the Kansas Jayhawks securing their 4th National Title for the historic program in record breaking fashion, overcoming a 15 point halftime deficit, marking the largest comeback win in championship game history. 
+  For the second consecutive year, the Big 12 Conference has taken home the title, and after this run by the Jayhawks, it marks the 4th consecutive tournament where a Big 12 team has represented the league in the Final Four, along with five out of the last six. And who knows, this remarkable stretch for the conference could have an added layer to it if the 2020 season hadn’t been canceled, with Kansas and Baylor being the two prohibited favorites going into March along with an Obi Toppin led Dayton squad. 
+  The Big 12 as a whole has improved drastically from where the league was back in 2012, after Missouri, Texas A&M, Colorado and Nebraska left to join other power 5 leagues respectively. Now, as the overall talent level and depth of the league has exponentially grown, respect for the conference has soured, with many involved within college basketball labeling this collection of ten universities as the most rigorous, challenging and competitive league in the sport. However, is the Big 12 the best conference in college basketball? Or are there still other leagues that have a case to stake their claim as the top dog? Well, let’s find out. 
+  Back at the beginning of February all ten Big 12 squads registered inside the top 50 teams in the country in defensive efficiency rating, which measures a team's defense based on the amount of times an opponent scores compared to the amount of possessions that opponent has in a game along with their turnover rate and offensive rebound percentage. 
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+ggplot(defenses, aes(x = reorder(Conference, Count), weight = Count)) +
+  geom_bar() +
+  labs(
+    title = "Teams that Finished top 70 Defensively by Conference", 
+    x = "Conference", 
+    y = "Count",  
+    subtitle = "The Big 12 leads the back with its tantalizing defense",
+    caption = "Source: Teamrankings | By Dillon Pelster"
+  ) +
+  theme_light() + 
+  coord_flip() +
+  theme(
+    title = element_text(color = "purple", size = 13, face = 'bold'),
+    plot.background = element_rect(fill = "green"),
+    panel.border = element_rect(linetype = "dashed", fill = NA),
+    panel.grid.major = element_line(colour = "black"),
+    axis.text = element_text(color = "blue")
+  )
+  
+  
+   
+```
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+NET <- kenpom %>%
+  filter(Conf == "B10" | Conf == "SEC" | Conf == "P12" | Conf == "ACC" | Conf == "B12" | Conf == "BE") %>%    mutate(AdjEM...5 = as.numeric(AdjEM...5)) %>%
+arrange(Conf)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+SOS <- kenpom %>%
+  filter(Conf == "B10" | Conf == "SEC" | Conf == "P12" | Conf == "ACC" | Conf == "B12" | Conf == "BE") %>%    mutate(AdjEM...10 = as.numeric(AdjEM...10)) %>%
+  arrange(desc(AdjEM...10)) 
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Netratings <- NET %>%
+  group_by(Rk, Team, Conf, AdjEM...5, AdjEM...10) %>%
+  mutate(AdjEM...10 = as.numeric(AdjEM...10)) %>%
+  arrange(desc(AdjEM...5)) %>%
+  select(AdjEM...5)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+B12NET <- Netratings %>%
+  group_by(Rk, Team, Conf, AdjEM...5, AdjEM...10) %>%
+  arrange(desc(AdjEM...5)) %>%
+  select(AdjEM...5)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+big12ball<- B12NET %>%
+  filter(Conf == "B12")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(ggrepel)
+
+library(scales)
+```
+
+
+  Here, we can see that by the end of the regular season, the conference still led the way as the best defensive league in the sport, with eight teams from the conference still qualifying inside the top 70 of all teams in terms of defensive efficiency, including five programs inside the top 19. For reference, there are 359 division one programs that participated in basketball this season. In order to be a top 70 defensive team, you have to fall into the top 18% of all teams in the country in this category. The Big 12 had 80% of its league qualify. Offensive basketball is a fantastic spectacle to watch, however, defense wins championships. 
+	Moving along, due in part to how good of a defensive league this conference was, it led Kenpom, the ultimative of college basketball statistics, which the NCAA committee now seeds its teams based off, to categorize every single Big 12 team inside the top 66 of all 359 division one teams in the NET efficiency rating. The NET rating combines a lot of advanced analytical stats that pertain to who a team played, where they played their opponent, how they won the game and how they lost the game. 
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+ggplot() +
+  geom_point(data=Netratings, aes(x=AdjEM...5, y=AdjEM...10), color="grey") +
+  geom_point(data=big12ball, aes(x=AdjEM...5, y=AdjEM...10), color="red") +
+  geom_text_repel(data=big12ball, aes(x=AdjEM...5, y=AdjEM...10, label=Team)) +
+  labs(x = "NET Rating", y = "Strength of Schedule",
+       title = "The Big 12 is an Endless Marathon",
+       subtitle = "The Big 12 is in a league of its own according to KenPom",
+       caption = "Source: KenPom | By Dillon Pelster") +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 10),
+    axis.text = element_text(size = 10, color = "blue"),
+    axis.ticks = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "none"
+  )
+
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+bottomteams <- NET %>%
+  filter(Team == "West Virginia"| Team == "Nebraska" | Team == "Georgetown" | Team == "Oregon St." | Team == "Georgia" | Team == "N.C. State") 
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+lastplace <- bottomteams %>%
+  select(Rk, Team, AdjEM...5, AdjEM...10) %>%
+  arrange(desc(AdjEM...5))
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+WV <- lastplace %>%
+  filter(Team == "West Virginia")
+```
+
+
+
+  Clearly the Big 12 seems to be in a league of its own, with all ten teams qualifying inside the top 66, the only conference in the country that can say that. On this graph, we can see all ten teams from the conference stationed in the upper right quadrant, which is where you want to be. 
+  Did you know that back on January 25th of this year the nine hardest schedules left in the country all came from the Big 12 conference? So what does it mean? It means this league is hard to play in. It’s a grind game in and game out no matter the opponent. 
+	As Iowa State Head Coach TJ Otzelberger said following Iowa State’s defeat to Texas Tech in the Big 12 Tournament,
+  “I don’t know who we will play [in the NCAA Tournament] and how that will all go, but I do know that we’re playing in the best league in the country. We play the teams that are the most physical. We play in the league that’s the most physical, so my guess would be whoever we play outside the league, it may not be that same level of defensive intensity that we see night in and night out.”
+	It’s no surprise Otzelberger believes this. Just take a look at Oklahoma State. They finished the year 15-15 on the season, ineligible for postseason play. However, if they were eligible they would’ve been quite the puzzle to figure out for the NCAA Tournament Committee, as they finished top 35 in the NET and top 15 in the country in defensive efficiency, while securing resume boosting wins against Texas Tech and winning in Waco against Baylor. With that said, let's take a deeper dive into West Virginia, who finished last in the conference this year at 5-15 overall in conference play. 
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+ggplot() +
+  geom_point(data=lastplace, aes(x=AdjEM...5, y=AdjEM...10), color="grey") +
+  geom_point(data=WV, aes(x=AdjEM...5, y=AdjEM...10), color= "red") +
+  geom_text_repel(data=WV, aes(x=AdjEM...5, y=AdjEM...10, label=Team)) +
+  geom_text_repel(data=lastplace, aes(x=AdjEM...5, y=AdjEM...10, label=Team)) +
+  labs(x = "NET Rating", y = "Strength of Schedule",
+       title = "The Bottom of the Big 12 Doesn't Even Feel Like Rock Bottom",
+       subtitle = "Where would West Virgnia finish in the other Power Conferences?",
+       caption = "Source: KenPom | By Dillon Pelster") +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 10),
+    axis.text = element_text(size = 10, color = "blue"),
+    axis.ticks = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "none"
+  )
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(waffle)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Big12 <- c("Quad One Wins" = 66)
+SEC <- c("Quad One Wins" = 69)
+ACC <- c("Quad One Wins" = 31)
+BigTen <- c("Quad One Wins" = 61)
+Pac12 <- c("Quad One Wins" = 27)
+BigEast <-c("Quad One Wins" = 45)
+```
+
+  As we can see, in comparison to the other power 6 conference teams who finished dead last in their league, West Virginia blows these teams out the door in terms of NET efficiency rating and strength of schedule. Oregon State had the 233rd best NET ranking, Georgia was good enough for 219th. West Virginia had a NET rating of 66. The next closest last place power 6 conference team was NC State, ranked 140th. There are more teams that separate West Virginia and NC State than there are teams that separate West Virginia and Gonzaga. If the NCAA Tournament strictly chose teams based on their NET ranking, the most important stat they go by, then all ten Big 12 teams would’ve qualified, including West Virginia, a team that won just 25% of its conference games. 
+  Furthermore, it is no surprise how rigorous of a conference the Big 12 was last season and has been for years. However, let's see how these teams compare to other power 6 leagues in terms of quadrant one wins. Quad one wins are the best kind of win you can get in the regular season to boost your tournament resume, determined by beating a team inside the NET top 30 at home, beating a team on a neutral court ranked top 50 in the NET and beating a team on the road inside the top 75 of the NET. 
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE, fig.width=9, fig.height=10}
+iron(
+  waffle(
+    Big12,
+    rows = 7,
+    xlab="Big 12",
+    colors = c("Red")
+  ) +
+  labs(
+    title="Who is the Real Conference of Champions?", 
+    subtitle="SEC, Big 12, Big Ten lead the way for most Quad 1 Wins for a Conference.") + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 10),
+    axis.title.y = element_blank()
+  ),
+  waffle(
+    SEC,
+    rows = 6,
+    xlab="SEC",
+    colors = c("blue") 
+  ),
+  waffle(
+    BigTen,
+    rows = 6,
+    xlab="Big Ten",
+    colors = c("black") 
+  ),
+    waffle(
+      Pac12,
+      rows = 3,
+      xlab="Pac12",
+      colors = c("yellow")
+  ),
+    waffle(
+      BigEast,
+      rows = 6,
+      xlab="Big East",
+      colors = c("green")
+  ),
+    waffle(
+      ACC,
+      rows = 4,,
+      colors = c("purple")
+  ) +
+    labs(
+      x = "ACC",
+      caption="Source: Bracketresearch.com | Graphic by Dillon Pelster"
+    )
+) 
+```
+
+  The Big 12 finished second to the SEC, albeit by only three games, for the most quad wins in the country by a single conference. It is worth noting however, that the Big 12 is the smallest power conference league in terms of the amount of teams in the conference, meaning they would have fewer opportunities to get quad one wins compared to other leagues. The league is also the only power conference where each team plays a home and home series versus every other team in the conference year in, year out, given the fact that the league consists of ten teams. 
+    So, is the Big 12 the best Conference in college basketball? This year alone the conference had all six of its NCAA tournament representatives reach the round of 32, meaning 19% of the teams to reach this round were from one conference. There are 32 division one conferences in the sport. We saw a 9-seeded TCU team that finished 9-11 in conference play take, at the time, a 31-3 one-seed Arizona team to the brink of elimination. We saw an Iowa State team, picked to finish last in the conference, who finished with a 7-12 conference record, upset the Big Ten regular season champions, Wisconsin, in Milwaukee. 
+Kansas and Baylor have won the last two national championships. The last conference to accomplish this was the ACC in 2009-2010 when North Carolina and Duke won it all in back-to-back years. But once again, let's not forget about the cancellation of the 2020 season, where Kansas and Baylor were the two prohibited favorites entering conference tournament play. Let’s not forget that Texas Tech was 13 seconds away from a title in 2019, before DeAndre Hunter ripped the souls right out of the fans down in Lubbock. That’s four consecutive years the Big 12 has been at or nearly at the top of the mountain. 
+  So you be the judge. Is the Big 12 the best conference in college basketball? It sure seems to have a case. 

@@ -1,0 +1,395 @@
+---
+title: 'The Boston Celtics are Surging, Buckle Up Folks '
+author: 'Dillon Pelster '
+date: '2022-04-28'
+slug: the-boston-celtics-are-surging-buckle-up-folks
+categories: []
+tags: []
+---
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(gt)
+library(scales)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+oefficiency <- read_csv("Offefficiency - Sheet1.csv")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+defficiency <- read_csv("DefenseEfficiency  - Sheet1.csv")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+marginofW <- read_csv("MarginofW_expected - Sheet1.csv")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+OppPPg <- read_csv("OppPPG - Sheet1.csv")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+WinsandSRS <- read_csv("WinsandSRS - Sheet1.csv")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Tatum <- read_csv("Tatum - Sheet1.csv")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+IndividualD <- read_csv("IndividualD - Sheet1.csv")
+```
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+top10 <- defficiency %>%
+mutate(Rank = as.numeric(Rank)) %>%
+mutate(`2021` = as.numeric(`2021`)) %>%
+select(Rank, Team, `2021`) %>%
+  rename(`Defensive Efficiency` = `2021`)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+top10defenses <- top10 %>%
+  group_by(Rank, Team, `Defensive Efficiency`) %>%
+  filter(Team == "Boston" | Team == "Golden State" | Team == "Phoenix" | Team == "Memphis" | Team == "Miami" | Team == "Dallas" | Team == "Cleveland" | Team == "LA Clippers" | Team == "New York" | Team == "Toronto") 
+  
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+NBAdefense <- top10defenses %>%
+  select(Rank, Team, `Defensive Efficiency`)
+```
+
+The Boston Celtics have been one of the better teams in the NBA for more than a half decade now, appearing in three of the last five Eastern Conference Finals. The Celtics window of title contention appeared to be solidified for the next decade after the 2018 Eastern Conference Finals, when then rookie Jayson Tatum, along with Jaylon Brown in his second year, took the league by stormed, taking Lebron James and the Cleveland Cavaliers to the brink of elimination, going toe-to-toe for seven games. 
+
+However, in the three seasons that followed after that improbable run in 2018, turmoil and lack of continuity halted the growth of Boston’s two young pillars. Sure, they made it to the ECF’s in the bubble back in 2020 but, last year, in the 2020-2021 season, the Celtics struggled tremendously, leaving considerable doubt amongst the fans in Boston as they began play in the 2021-2022 season. 
+	
+The Celtics finished as the East’s number 7 seed last season before being eliminated in 5 games by the Brooklyn Nets in the first round. Coming into this season, questions lingered all throughout the roster. Point guard play, shooting capability, front court depth, coaching and overall depth on the roster were all huge questions that needed to be answered quickly once this season started. Instead, none of these questions were answered, with another question being added to the puzzle. That question being, can Jayson Tatum and Jaylen Brown succeed together?
+	
+People throughout the NBA were debating this notion as the calendar flipped to 2022. On January 7th, the Boston Celtics were the 11th seed in the Eastern Conference. Nothing was going right. There were rumors of a total rebuild of the entire roster come the trading deadline. Their record sat at 18-21. What transpired the rest of the regular season was unprecedented, as the Celtics made a U-turn with the edge of the cliff staring them directly in the face, going 28-7 over the final 35 games of the season, all while securing the number 2 seed in the conference. 
+	
+Now, as the NBA Playoffs are off and running, the Celtics are soaring beyond anyone’s imagination, completing a four game sweep of the Brooklyn Nets, led by super stars Kevin Durant and Kyrie Irving. This complete 1-80 by the Celtics has opened the eyes of the entire association, with Boston now being one of the presumed favorites to win it all. 
+	
+How did Boston get to this point though? Their season was a complete mess just three and a half months ago. How were they able to not only turn it around, but become one of, if not the best team in the entire NBA, over a 35 game stretch? Well, let’s find out. 
+	
+It would be unceremoniously wrong to start this discussion off by not mentioning the Celtics suffocating defense. Led by the Defensive Player of the Year, Marcus Smart, the Celtics have given teams fits on the defensive end of the floor like no other. With every starter being between 6’4” and 6’10”, Boston possesses excellent length across the board that at times can be overwhelming for opponents to figure out. 
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+top10 %>% gt() %>%
+  tab_header(
+    title = "The Top 10 Teams in Defensive Efficiency Rating",
+    subtitle = "Yes, defense is alive and well in the NBA"
+  ) %>%  
+  tab_source_note(
+    source_note = md("**By:** Dillon Pelster  |  **Source:** [Sports Reference](https://www.sports-reference.com/cbb/seasons/)")
+  ) %>% 
+  tab_style(
+    style = cell_text(color = "black", weight = "bold", align = "left"),
+    locations = cells_title("title")
+  ) %>% 
+  tab_style(
+    style = cell_text(color = "black", align = "left"),
+    locations = cells_title("subtitle")
+  ) %>%
+  tab_style(
+     locations = cells_column_labels(columns = everything()),
+     style = list(
+       cell_borders(sides = "bottom", weight = px(3)),
+       cell_text(weight = "bold", size=12)
+     )
+   ) %>%
+  opt_row_striping() %>% 
+  opt_table_lines("none") %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "blue"),
+      cell_text(color = "gold")
+      ),
+    locations = cells_body(
+      rows = Team == "Boston")
+  )
+```
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+top25 <- IndividualD %>%
+ group_by(Player, Team) %>%
+  select(Team)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+players <- top25 %>%
+  group_by(Team) %>%
+  tally()
+```
+
+With persistent, attentive detail throughout the remaining 35 games of the regular season, Boston was able to climb to the top of the mountain and claim their stake as the best defensive team in the NBA, finishing number one in the league in defensive efficiency rating. The table above highlights this rating, which is measured by the amount of points a team allows an opponent to score against them per 100 possessions. The cumulative of this formula over the full 82 game season is what gets us to this point. 
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+
+ggplot(players, aes(x = reorder(Team, n), weight = n)) + 
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Which Teams Have the Best Individual Defenders?", 
+       x = "Teams with top 25 defenders", y = "Amount of Players per Team", caption = "Source: Statmuse.com | By Dillon Pelster") +                          
+  theme_light() +
+  coord_flip() +
+  theme(
+    title = element_text(color = "purple", size = 15, face = 'bold'),
+    plot.background = element_rect(fill = "yellow"),
+    panel.border = element_rect(linetype = "dashed", fill = NA),
+    panel.grid.major = element_line(colour = "black"),
+    axis.text = element_text(color = "red")
+  ) 
+```
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+PPG <- read_csv("NewWinsandSRS - Sheet1.csv")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+OppvsPPg <- PPG %>%
+  select(`Eastern Conference`, PSG, PAG)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+CelticsAverages <- OppvsPPg %>%
+  filter(`Eastern Conference` == "Boston Celtics")
+```
+
+It’s no surprise that the best defensive team in the league also had the most players finish within the top 25 of individual defensive efficiency ratings. With that said, all four Celtics inside the top 25, Marcus Smart, Al Horford, Jayson Tatum and Jaylon Brown all finished within the top 12 as well!! That itself is pretty incredible. Four of the twelve hardest guys to get a bucket on during the 2021-2022 NBA season ,per the numbers, originate from one team. 
+
+While Boston’s defense has provided a spark to propel this team, it would be hard to overlook the strides this team has made offensively too. By season's end, Boston finished 6th in the NBA in offensive efficiency, a revelation from where they were four months ago, as they also finished top 5 in the league as a team in assist to turnover ratio. According to first year Head Coach Ime Udoka, the Celtics ability to break bad habits offensively allowed for their growth on this side of the court, becoming a more team oriented system that, in his opinion, has been the greatest improvement of his squad, not the defense, which in turn has helped spark this unforeseen turnaround. 
+	
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+ggplot() + 
+  geom_point(data=OppvsPPg, aes(x=PAG, y=PSG, color="grey")) +
+  geom_smooth(data=OppvsPPg, aes(x=PAG, y=PSG), method="lm") +
+  geom_point(data=CelticsAverages, aes(x=PAG, y=PSG), color="red",) +
+  geom_text(aes(x=106, y=114, label="It's Hard to Score on Boston"), color="black") +
+  labs(x = "Points Allowed per Game", y = "Points Scored per Game",
+       title = "Which Teams out East are the Most Complete",
+       subtitle = "Boston's balance stands out, led by their stifling defense",
+       caption = "Source: Teamrankings | By Dillon Pelster") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"), 
+    axis.title = element_text(size = 10),
+    axis.text = element_text(size = 7, color = "black"),
+    axis.ticks = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "none"
+  )
+```
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+wins <- WinsandSRS %>%
+   mutate(W = as.numeric(W)) %>%
+   mutate(SRS = as.numeric(SRS))
+
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+WSRS <- wins %>%
+  select(`Eastern Conference`, W, SRS)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+CelticsWSRS <- WSRS %>%
+  filter(`Eastern Conference` == "Boston Celtics")
+```
+
+Here, we can see how well balanced Boston has become, finishing as the only team in the Eastern Conference to be both top 5 in points per game and points allowed per game. Boston not only was able to finish top dog in the entire league in defensive efficiency, but by season's end they had also secured the top spot in the east in terms of fewest points allowed. Let’s dive deeper into the numbers however, to see just how good this Celtics team has been recently. 
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+ggplot() + 
+  geom_point(data=WSRS, aes(x=SRS, y=W, color="grey")) +
+  geom_smooth(data=WSRS, aes(x=SRS, y=W), method="lm") +
+  geom_point(data=CelticsWSRS, aes(x=SRS, y=W), color="red",) +
+  geom_text(aes(x=5.5, y=45, label="Boston is lonely at the top"), color="black") +
+  geom_text(aes(x=.39, y=25, label="The Middle of the Pack"), color="black") +
+  labs(x = "Strength of Record + Victories", y = "Season Wins",
+       title = "Who is the Best Team in the Eastern Conference?",
+       subtitle = "Boston leads the way in overall strength of record | Red Dot = Boston",
+       caption = "Source: Teamrankings | By Dillon Pelster") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"), 
+    axis.title = element_text(size = 10),
+    axis.text = element_text(size = 7, color = "black"),
+    axis.ticks = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "none"
+  )
+  
+```
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Victory <- marginofW %>%
+  mutate(`2021` = as.numeric(`2021`)) %>%
+  mutate(NRtg = as.numeric(NRtg)) %>%
+  mutate(Rank = as.numeric(Rank))
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+sizeofW <- Victory %>%
+  select(Rank, Team, `2021`, NRtg)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+CelticsVictories <- sizeofW %>%
+  filter(Team == "Boston")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(ggalt)
+```
+
+At one point during the Celtics 28-7 blitz to end the regular season, Boston beat 13 consecutive playoff teams, by far the longest streak of such wins by any team at any point this season. This alludes to the graph above, with Boston clearly having the strongest strength of record of any team out east. Keep in mind this team was 18-21 just past the halfway point of the season. The fact that Boston not only managed to flip the script and lead the way in strength of victory, but also manage 51 wins, good for second in the conference, is a feat that essentially feels almost unexplainable. Not only were they beating quality opponents on a consistent basis, Boston also managed to hold at least a 20 point lead in 19 of their 41 road games this season, the most such road games where this was accomplished in the history of the NBA. 
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+ggplot() + 
+  geom_lollipop(
+    data=sizeofW, 
+    aes(y=NRtg, x=`2021`), 
+    horizontal = TRUE,
+    color = "blue"
+    ) + 
+  geom_lollipop(
+    data=CelticsVictories,
+    aes(y=NRtg, x=`2021`),
+    horizontal = TRUE,
+    color = "green"
+  ) + 
+  labs(title="Who's Playing Their Best Basketball at the Most Important Time", subtitle="Are you surprised? Once again, Boston sits at the top", x="Margin of Victory (- is good)", y="Expected scoring margin per 100 possesions",caption= "Source: Sportsreference | By Dillon Pelster") +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=11), 
+    panel.grid.minor = element_blank()
+    )
+
+```
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(scales)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+JT <- Tatum %>%
+  mutate(FGA = as.numeric(FGA)) %>%
+  mutate(TRB = as.numeric(TRB)) %>%
+  mutate(AST = as.numeric(AST)) %>%
+  mutate(PTS = as.numeric(PTS))
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Tatum18 <- JT %>%
+  select(Season, FGA, TRB, AST, PTS) %>%
+  filter(Season == "2017-18")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Tatum19 <- JT %>%
+  select(Season, FGA, TRB, AST, PTS) %>%
+  filter(Season == "2018-19")
+  
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Tatum20 <- JT %>%
+  select(Season, FGA, TRB, AST, PTS) %>%
+  filter(Season == "2019-20")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Tatum21 <- JT %>%
+  select(Season, FGA, TRB, AST, PTS) %>%
+  filter(Season == "2020-21")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Tatum22 <- JT %>%
+  select(Season, FGA, TRB, AST, PTS) %>%
+  filter(Season == "2021-22")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Tatumline <- bind_rows(Tatum18, Tatum19, Tatum20, Tatum21, Tatum22)
+```
+
+Here, we can see that by the end of the regular season Boston was dominating opponents left and right, beating any team that came across their paths. Not only did the Celtics lead the way in scoring margin by the end of the season, but the numbers indicated Boston’s expected point differential was supposed to lead the league as well, which held serve. Once again, it is essential to remember that this team was 18-21 at the halfway mark. How does a team that was below .500 near the all star break end up leading the league in scoring margin? Unfathomable. Boston is just the third team in NBA history to be under .500 at the halfway point of the season and finish with a win percentage above .600…and they did it convincingly. 
+	
+None of this however, would be possible without the ascendance of Forward Jayson Tatum, who at just 23 years old is becoming one of the most unguardable players in the entire ;league, as he enters super stardom territory, especially after his performance in the first round last week against Brooklyn. Many involved within the league now consider Tatum to be near the top 10, or already there, amongst best players in the entire league. With Boston’s team defense giving teams fits on a nightly basis, combined with the surging brilliance of Tatum, Boston’s full potential is unfolding before our very eyes. 
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+ggplot() +
+  geom_line(data = Tatumline, aes(x = Season, y = PTS, group=1), color = "black", linetype = 6, size = 1) +
+  labs(y = "Average Points per Season", 
+       title = "Tatum is officially entering Superstardom",
+       subtitle = "Celtics star continues to improve year by year", caption =  "Source: Sportsreference | By Dillon Pelster") +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 10),
+    axis.title = element_text(size = 8),
+    panel.grid.minor = element_blank()
+  )
+
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+ggplot() +
+  geom_line(data = Tatumline, aes(x = Season, y = AST, group=1), color = "black", linetype = 6, size = 1) +
+  labs(y = "Average Assists per Season", 
+       title = "Tatum is Becoming an All Around Playmaker",
+       subtitle = "Celtics Forward is sharing the wealth", caption =  "Source: Sportsreference | By Dillon Pelster") +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 10),
+    axis.title = element_text(size = 8),
+    panel.grid.minor = element_blank()
+  )
+
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+ggplot() +
+  geom_line(data = Tatumline, aes(x = Season, y = TRB, group=1), color = "black", linetype = 6, size = 1) +
+  labs(y = "Average Assists per Season", 
+       title = "Yet Another Year by Year Improvement for the Star",
+       subtitle = "Tatum is attacking the glass", caption =  "Source: Sportsreference | By Dillon Pelster") +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 10),
+    axis.title = element_text(size = 8),
+    panel.grid.minor = element_blank()
+  )
+```
+
+It’s pretty evident how much Tatum has grown since his rookie season. This past February he started in the all star game for the very first time, while he also has the same amount of eastern conference finals appearances as Giannis Antentokpumpo. 
+	
+Here on these graph, the consistent growth year after year on the offensive end has been stellar, with Tatum not only improving his own scoring arsenal, but becoming an overall playmaker as well, averaging a career high in assists and rebounds, all while finishing as a top 10 individual defender too. Tatum’s growth is a huge factor in why Boston was able to make this sudden turnaround possible, but it can not go unnoticed that his growth as a leader has improved tremendously, holding himself accountable to the high expectations placed upon him. \
+
+The only first round series that resulted in a four game sweep was at the hands of the Celtics, with the preseason title favorites, the Brooklyn Nets, bowing out in the most unexpected of ways. It seems to have awoken all the doubters of this Celtics turnaround, with many throughout the league realizing that this run was not some fluke.		  
+
+“We said it openly. We’re not running from anyone or anybody, and we’ll let the chips fall where they may,” Udoka said following Boston’s sweep of the Nets. “The overall message that I gave the team and they relayed back to me is, we’re not scared of anybody and we’re not going to hide from anybody. If we’re going to win, we have to go through certain teams at certain times anyway. So might as well get a really good test early, which I think will help us going down the line,” he said. 
+
+With the defending champion Milwaukee Bucks set to face these Celtics in the second round of the NBA Playoffs, it's hard to overlook these comments from Udoka, especially considering Milwaukee avoided the number two spot on the final day of the regular season, resting all of their starters. 
+
+If Boston is able to get past the defending champions after blitzing through the preseason favorites, who knows, it might just be their year to claim banner number 18. What can’t be debated regardless of next round's matchup is how improbable this run has been by the Celtics, and if it were to continue as we head into the summer months, a fairy tail ending might be in the writing for the green and gold. 
